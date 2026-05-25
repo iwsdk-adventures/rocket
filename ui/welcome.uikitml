@@ -1,0 +1,480 @@
+<meta preferred-color-scheme="dark" />
+<style>
+  .hud {
+    width: 76;
+    height: 82;
+    flex-direction: column;
+    padding: 3.2;
+    gap: 2.4;
+    background-color: rgba(12, 22, 33, 0.64);
+    border-color: rgba(170, 219, 255, 0.74);
+    border-width: 0.18;
+    border-radius: 1.6;
+    font-family: inter;
+  }
+
+  .frame {
+    position-type: absolute;
+    position-left: 1.1;
+    position-right: 1.1;
+    position-top: 1.1;
+    position-bottom: 1.1;
+    border-color: rgba(128, 199, 255, 0.34);
+    border-width: 0.08;
+    border-radius: 1.1;
+  }
+
+  .corner-row {
+    position-type: absolute;
+    flex-direction: row;
+    justify-content: space-between;
+    position-left: 0.55;
+    position-right: 0.55;
+    position-top: 0.55;
+  }
+
+  .corner-row-bottom {
+    position-type: absolute;
+    flex-direction: row;
+    justify-content: space-between;
+    position-left: 0.55;
+    position-right: 0.55;
+    position-bottom: 0.55;
+  }
+
+  .corner {
+    width: 1.4;
+    height: 1.4;
+    border-color: rgba(185, 226, 255, 0.9);
+    border-width: 0.12;
+    border-radius: 0.7;
+    background-color: rgba(210, 239, 255, 0.26);
+  }
+
+  .scan-line {
+    height: 0.08;
+    background-color: rgba(116, 201, 255, 0.22);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8;
+    padding-top: 1.5;
+    padding-left: 2.2;
+    padding-bottom: 1.1;
+    border-color: rgba(119, 183, 231, 0.32);
+    border-width: 0.08;
+    border-radius: 0.8;
+    background-color: rgba(65, 112, 150, 0.14);
+  }
+
+  .eyebrow {
+    font-size: 1.45;
+    font-weight: 600;
+    color: #eef8ff;
+    text-align: left;
+  }
+
+  .time-row {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 1.4;
+  }
+
+  .time-prefix {
+    font-size: 5.7;
+    font-weight: 800;
+    color: #e9f4ff;
+  }
+
+  .countdown {
+    font-size: 5.7;
+    font-weight: 800;
+    color: #ff9b37;
+  }
+
+  .subhead {
+    font-size: 1.5;
+    font-weight: 700;
+    color: #d9efff;
+    text-align: left;
+  }
+
+  .section {
+    flex-direction: column;
+    gap: 1.2;
+    padding: 1.5;
+    border-color: rgba(118, 184, 230, 0.3);
+    border-width: 0.08;
+    border-radius: 0.8;
+    background-color: rgba(22, 42, 58, 0.28);
+  }
+
+  .section-title {
+    font-size: 1.45;
+    font-weight: 700;
+    color: #f4fbff;
+  }
+
+  .status-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.4;
+  }
+
+  .status-label {
+    width: 17;
+    font-size: 1.55;
+    font-weight: 600;
+    color: #f5fbff;
+  }
+
+  .bar-track {
+    width: 34;
+    height: 1.05;
+    flex-direction: row;
+    gap: 0.45;
+    padding: 0.12;
+    background-color: rgba(141, 176, 201, 0.24);
+  }
+
+  .bar {
+    width: 2.45;
+    height: 0.8;
+    background-color: #54e77e;
+  }
+
+  .bar-dim {
+    width: 2.45;
+    height: 0.8;
+    background-color: rgba(147, 183, 205, 0.28);
+  }
+
+  .percent {
+    width: 7.5;
+    font-size: 1.55;
+    font-weight: 600;
+    color: #f2f9ff;
+    text-align: right;
+  }
+
+  .metrics-row {
+    flex-direction: row;
+    gap: 1.6;
+  }
+
+  .metric-card {
+    width: 35.1;
+    height: 17;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5;
+    border-color: rgba(125, 191, 237, 0.34);
+    border-width: 0.08;
+    border-radius: 0.8;
+    background-color: rgba(24, 48, 66, 0.22);
+  }
+
+  .metric-body {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rocket-metric {
+    flex-direction: row;
+    align-items: center;
+    gap: 2;
+  }
+
+  .height-value {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.8;
+  }
+
+  .height-number {
+    font-size: 4.6;
+    font-weight: 700;
+    color: #f6fbff;
+  }
+
+  .unit {
+    font-size: 1.6;
+    color: #e7f4ff;
+  }
+
+  .gauge {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 0.7;
+  }
+
+  .gauge-bar {
+    width: 2.1;
+    height: 11;
+    position-type: relative;
+    background-color: rgba(154, 179, 195, 0.35);
+  }
+
+  .gauge-fill {
+    position-type: absolute;
+    position-left: 0;
+    position-bottom: 7.45;
+    width: 2.1;
+    height: 1.05;
+    background-color: #ff9b37;
+  }
+
+  .ticks {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 11;
+  }
+
+  .tick {
+    font-size: 1.25;
+    color: #f0f8ff;
+  }
+
+  .weather-card {
+    gap: 1.2;
+  }
+
+  .weather-readout {
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.1;
+    height: 11.2;
+  }
+
+  .weather-condition-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .weather-condition {
+    font-size: 1.45;
+    font-weight: 700;
+    color: #f4fbff;
+  }
+
+  .weather-divider {
+    height: 0.08;
+    background-color: rgba(125, 191, 237, 0.28);
+  }
+
+  .weather-wind-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .weather-wind-label {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.8;
+  }
+
+  .weather-label {
+    font-size: 1.45;
+    font-weight: 700;
+    color: #f4fbff;
+  }
+
+  .weather-value {
+    font-size: 1.45;
+    font-weight: 700;
+    color: #f2f9ff;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 1.3;
+    padding: 1.5;
+    border-color: rgba(125, 191, 237, 0.28);
+    border-width: 0.08;
+    border-radius: 0.8;
+    background-color: rgba(23, 42, 59, 0.24);
+  }
+
+  .button-row {
+    flex-direction: row;
+    gap: 1.6;
+  }
+
+  .control-button {
+    width: 21.5;
+    height: 12;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9;
+    background-color: rgba(48, 76, 99, 0.34);
+    border-color: rgba(180, 224, 255, 0.66);
+    border-width: 0.12;
+    border-radius: 0.75;
+    color: #f3f9ff;
+    font-size: 1.65;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .control-button:active {
+    background-color: rgba(92, 136, 170, 0.44);
+  }
+
+  .launch-button {
+    width: 21.5;
+    height: 12;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9;
+    background-color: rgba(124, 76, 35, 0.42);
+    border-color: #ffae45;
+    border-width: 0.14;
+    border-radius: 0.75;
+    color: #fff4e7;
+    font-size: 1.65;
+    font-weight: 800;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .launch-button:active {
+    background-color: rgba(255, 155, 55, 0.38);
+  }
+
+  .hud-icon {
+    color: #eff8ff;
+  }
+
+  .orange-icon {
+    color: #ff9b37;
+  }
+</style>
+
+<div class="hud">
+  <div class="frame"></div>
+  <div class="corner-row">
+    <div class="corner"></div>
+    <div class="corner"></div>
+  </div>
+  <div class="corner-row-bottom">
+    <div class="corner"></div>
+    <div class="corner"></div>
+  </div>
+
+  <div class="header">
+    <span class="eyebrow">MISSION: ORBITAL TEST</span>
+    <div class="time-row">
+      <span class="time-prefix">T-</span>
+      <span id="countdown-value" class="countdown">00:00:08</span>
+    </div>
+    <span id="mission-status" class="subhead">HOLD LAUNCH TO ARM</span>
+  </div>
+
+  <div class="section">
+    <span class="section-title">VEHICLE STATUS</span>
+    <div class="scan-line"></div>
+
+    <div class="status-row">
+      <span class="status-label">FUEL</span>
+      <div class="bar-track">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <span class="percent">100%</span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">ENGINE</span>
+      <div class="bar-track">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar-dim"></div>
+      </div>
+      <span class="percent">100%</span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">ELECTRICAL</span>
+      <div class="bar-track">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar-dim"></div>
+      </div>
+      <span class="percent">100%</span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-label">SYSTEMS</span>
+      <div class="bar-track">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <span class="percent">100%</span>
+    </div>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-card">
+      <span class="section-title">ROCKET HEIGHT</span>
+      <div class="metric-body">
+        <div class="rocket-metric">
+          <Rocket class="orange-icon" width="4" height="4" />
+          <div class="height-value">
+            <span id="height-number" class="height-number">0.0</span>
+            <span class="unit">m</span>
+          </div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-bar">
+            <div class="gauge-fill"></div>
+          </div>
+          <div class="ticks">
+            <span class="tick">45</span>
+            <span class="tick">30</span>
+            <span class="tick">15</span>
+            <span class="tick">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-card weather-card">
+      <span class="section-title">WEATHER</span>
+      <div class="weather-readout">
+        <div class="weather-condition-row">
+          <span class="weather-condition">CLEAR</span>
+          <Sun class="hud-icon" width="4.5" height="4.5" />
+        </div>
+        <div class="weather-divider"></div>
+        <div class="weather-wind-row">
+          <div class="weather-wind-label">
+            <Wind class="hud-icon" width="2.4" height="2.4" />
+            <span class="weather-label">WIND</span>
+          </div>
+          <span class="weather-value">6 m/s</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <span class="section-title">LAUNCH CONTROLS</span>
+    <div class="button-row">
+      <button id="system-check-button" class="control-button">
+        <ClipboardCheck class="hud-icon" width="4.2" height="4.2" />
+        <span>SYSTEM CHECK</span>
+      </button>
+      <button id="hold-button" class="control-button">
+        <Pause class="hud-icon" width="4.2" height="4.2" />
+        <span id="hold-button-label">HOLD</span>
+      </button>
+      <button id="launch-button" class="launch-button">
+        <Rocket class="hud-icon" width="4.2" height="4.2" />
+        <span id="launch-button-label">LAUNCH</span>
+      </button>
+    </div>
+  </div>
+</div>

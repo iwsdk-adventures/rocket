@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "uikitml": {
+      "source": "drawcall-ai/uikitml",
+      "sourceType": "github",
+      "skillPath": "skills/uikitml/SKILL.md",
+      "computedHash": "28d7f21d4d359677b79c6b7381b4c68fd2e83ab7221a5093ea4bfa802979ad84"
+    },
+    "vitexec": {
+      "source": "drawcall-ai/vitexec",
+      "sourceType": "github",
+      "skillPath": "skills/vitexec/SKILL.md",
+      "computedHash": "361b6980a7439e11bf392e5baf31556270e3d28453f2eef4887a9f940232bd5c"
+    }
+  }
+}
