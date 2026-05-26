@@ -12,6 +12,7 @@
     "reference:warmup": "iwsdk reference warmup",
     "build": "vite build",
     "preview": "vite preview",
+    "record:rocket": "node scripts/record-rocket-playthrough.mjs",
     "journal:codex": "python3 scripts/codex-journal.py --capture-current",
     "package:hub": "python3 scripts/codex-journal.py --capture-current && node scripts/package-for-hub.mjs"
   },
