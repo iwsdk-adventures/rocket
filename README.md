@@ -52,21 +52,10 @@ The playthrough script:
 
 ## Asset Attribution
 
-This project includes selected models from Kenney's Space Kit asset pack:
+This repository does not include the full `kenney_space-kit/` source folder; that folder is local-only and gitignored. It does include selected runtime GLB files copied into `public/gltf/space-kit/`.
 
-- Title: Space Kit 2.0
-- Creator/distributor: Kenney
-- Source: https://www.kenney.nl
-- Bundled local license file: `kenney_space-kit/License.txt`
-- Local license text: Creative Commons Zero, CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/
-- Project usage/modifications: selected GLB assets were copied into `public/gltf/space-kit/`, scaled, positioned, and composed into the AR launch site at runtime.
+Attribution for those assets:
 
-Kenney attribution is not required by the bundled CC0 license, but is gratefully provided here.
-
-If you are treating the asset pack as CC-BY for distribution purposes, use this conservative attribution:
-
-> "Space Kit 2.0" by Kenney, from https://www.kenney.nl, used in modified form as selected, scaled, and spatially composed GLB assets in this IWSDK AR rocket launch scene. Licensed under the applicable Creative Commons Attribution license from the asset source.
-
-That attribution identifies the title, creator, source, license basis, and project-side changes. Keep `kenney_space-kit/License.txt` with redistributed copies of the source asset pack.
-
-No endorsement by Kenney is implied.
+- "Space Kit 2.0" by Kenney, https://www.kenney.nl
+- Used in modified form as selected, scaled, and spatially composed GLB assets in this IWSDK AR rocket launch scene.
+- The local source pack license file says CC0 1.0. This attribution is included anyway and is intended to satisfy a CC-BY-style attribution requirement if one is assumed for distribution.
