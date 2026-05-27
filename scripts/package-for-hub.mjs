@@ -94,7 +94,7 @@ async function analyzeJournal(journalFile) {
   let checkpoints = 0;
 
   for (const row of rows) {
-    if (row.type === "user_message") userMessages += 1;
+    if (row.type === "user_message" && !isContextUserMessage(row)) userMessages += 1;
     if (row.type === "assistant_text") assistantMessages += 1;
     if (row.type === "tool_call") {
       toolCalls += 1;
@@ -102,7 +102,46 @@ async function analyzeJournal(journalFile) {
     }
   }
 
-  return { meta, userMessages, assistantMessages, toolCalls, checkpoints };
+  const active = estimateActiveDuration(rows);
+
+  return { meta, userMessages, assistantMessages, toolCalls, checkpoints, active };
+}
+
+function isContextUserMessage(row) {
+  const content = typeof row.content === "string" ? row.content.trimStart() : "";
+  return (
+    content.startsWith("# AGENTS.md instructions") ||
+    content.startsWith("<environment_context>")
+  );
+}
+
+function estimateActiveDuration(rows, capMs = 60_000) {
+  const byTurn = new Map();
+  for (const row of rows) {
+    if (row.type === "session_meta" || row.type === "capture" || !row.ts) continue;
+    const ts = Date.parse(row.ts);
+    if (!Number.isFinite(ts)) continue;
+    const turn = Number.isFinite(row.turn) ? row.turn : 1;
+    const events = byTurn.get(turn) ?? [];
+    events.push(ts);
+    byTurn.set(turn, events);
+  }
+
+  const turnDurations = [];
+  for (const turn of [...byTurn.keys()].sort((a, b) => a - b)) {
+    const events = byTurn.get(turn).sort((a, b) => a - b);
+    let duration = 0;
+    for (let i = 1; i < events.length; i++) {
+      const gap = events[i] - events[i - 1];
+      if (gap > 0) duration += Math.min(gap, capMs);
+    }
+    turnDurations.push(duration);
+  }
+
+  return {
+    activeMs: turnDurations.reduce((sum, duration) => sum + duration, 0),
+    turnDurations,
+  };
 }
 
 async function copyCheckpoints(journalDir, sessionId, outJournalDir) {
@@ -146,7 +185,7 @@ async function main() {
   await copyFile(journalFile, path.join(outJournalDir, "session.jsonl"));
 
   const copiedCheckpoints = await copyCheckpoints(journalDir, sessionId, outJournalDir);
-  const { meta, userMessages, assistantMessages, toolCalls, checkpoints } =
+  const { meta, userMessages, assistantMessages, toolCalls, checkpoints, active } =
     await analyzeJournal(journalFile);
 
   if (!meta) throw new Error(`session_meta missing in ${journalFile}`);
@@ -155,14 +194,15 @@ async function main() {
     slug: args.slug,
     session_id: sessionId,
     user_messages: userMessages,
-    user_messages_source: "codex-journal",
+    user_messages_source: "codex-journal user_message rows excluding AGENTS/environment context",
     assistant_messages: assistantMessages,
-    assistant_messages_source: "codex-journal",
+    assistant_messages_source: "codex-journal assistant_text rows",
     tool_calls: toolCalls,
     checkpoints: Math.max(checkpoints, copiedCheckpoints),
-    active_ms: null,
-    active_ms_source: "unavailable from codex-journal",
-    turn_durations_ms: [],
+    active_ms: active.activeMs,
+    active_ms_source:
+      "estimated from codex-journal event gaps (cap 60s/event); Codex journal lacks turn_duration records",
+    turn_durations_ms: active.turnDurations,
     model: meta.model,
     built_with: "Codex",
     codex_cli_version: meta.codex_cli_version,

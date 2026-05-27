@@ -291,10 +291,20 @@ def build_events(rows: list[dict[str, Any]], turn: int) -> list[dict[str, Any]]:
 
 def add_counts(meta: dict[str, Any], events: list[dict[str, Any]]) -> dict[str, Any]:
     meta = dict(meta)
-    meta["user_messages"] = sum(1 for event in events if event.get("type") == "user_message")
+    meta["user_messages"] = sum(
+        1 for event in events if event.get("type") == "user_message" and not is_context_user_event(event)
+    )
     meta["assistant_messages"] = sum(1 for event in events if event.get("type") == "assistant_text")
-    meta["tool_uses"] = sum(1 for event in events if event.get("type") in ("tool_call", "tool_result"))
+    meta["tool_uses"] = sum(1 for event in events if event.get("type") == "tool_call")
     return meta
+
+
+def is_context_user_event(event: dict[str, Any]) -> bool:
+    content = event.get("content")
+    if not isinstance(content, str):
+        return False
+    stripped = content.lstrip()
+    return stripped.startswith("# AGENTS.md instructions") or stripped.startswith("<environment_context>")
 
 
 def seed_current(args: argparse.Namespace) -> int:
